@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flowmind — Think Faster, Build Better</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0e1623;
+    --surface2: #141f33;
+    --border: rgba(99,190,145,0.15);
+    --accent: #3dffa0;
+    --accent2: #00c9ff;
+    --accent3: #8b5cf6;
+    --text: #e8f0fe;
+    --muted: #7a8fb5;
+    --glow: rgba(61,255,160,0.18);
+    --glow2: rgba(0,201,255,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  #cursor {
+    position: fixed; top: 0; left: 0; width: 14px; height: 14px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.12s ease, opacity 0.2s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; width: 42px; height: 42px;
+    border: 1.5px solid rgba(61,255,160,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.35s cubic-bezier(.18,.89,.32,1.28), width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+    width: 60px; height: 60px; border-color: var(--accent2);
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 150px;
+    pointer-events: none; opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(8,12,20,0.7);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    animation: slideDown 0.7s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 700;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: transparent; border: 1.5px solid var(--accent);
+    color: var(--accent); padding: 0.6rem 1.6rem; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: none; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+  .nav-cta:hover {
+    background: var(--accent); color: var(--bg);
+    box-shadow: 0 0 24px var(--glow);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 7rem 2rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero-bg-orb {
+    position: absolute; border-radius: 50%; filter: blur(90px);
+    animation: drift 8s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(61,255,160,0.12), transparent 70%); top: -10%; left: -5%; animation-delay: 0s; }
+  .orb2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,201,255,0.1), transparent 70%); bottom: -5%; right: -5%; animation-delay: -3s; }
+  .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%); top: 40%; left: 30%; animation-delay: -5s; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.08); } }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(61,255,160,0.08); border: 1px solid rgba(61,255,160,0.3);
+    color: var(--accent); padding: 0.4rem 1.1rem; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.9s 0.2s cubic-bezier(.16,1,.3,1) both;
+  }
+  .badge-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(61,255,160,0.5); } 50% { box-shadow: 0 0 0 6px transparent; } }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.35s cubic-bezier(.16,1,.3,1) both;
+  }
+  .h1-gradient {
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 60%, var(--accent2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem); color: var(--muted);
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.9s 0.5s cubic-bezier(.16,1,.3,1) both;
+  }
+  .hero-actions {
+    display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.9s 0.65s cubic-bezier(.16,1,.3,1) both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: var(--bg); padding: 1rem 2.5rem; border-radius: 999px;
+    border: none; font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: none;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 0 0 rgba(61,255,160,0.3);
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 40px rgba(61,255,160,0.35); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid rgba(255,255,255,0.15);
+    color: var(--text); padding: 1rem 2.2rem; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-visual {
+    margin-top: 5rem; position: relative;
+    animation: fadeUp 1s 0.8s cubic-bezier(.16,1,.3,1) both;
+    width: 100%; max-width: 860px;
+  }
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 80px rgba(61,255,160,0.06);
+    position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(61,255,160,0.04) 0%, transparent 50%);
+  }
+  .mock-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d1 { background: #ff5f57; } .d2 { background: #febc2e; } .d3 { background: #28c840; }
+  .mock-url {
+    flex: 1; background: var(--bg); border-radius: 6px; padding: 0.4rem 1rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--muted);
+    margin-left: 0.5rem;
+  }
+  .mock-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .mock-block {
+    background: var(--bg); border-radius: 12px; padding: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    animation: float 4s ease-in-out infinite;
+  }
+  .mock-block:nth-child(2) { animation-delay: -1.3s; }
+  .mock-block:nth-child(3) { animation-delay: -2.6s; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .mock-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+  .mock-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .mock-val { font-size: 1.5rem; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
+  .mock-bar-chart { margin-top: 1rem; display: flex; align-items: flex-end; gap: 4px; height: 40px; }
+  .mock-bar-item {
+    flex: 1; background: linear-gradient(to top, var(--accent2), var(--accent));
+    border-radius: 3px 3px 0 0; opacity: 0.7;
+    animation: barGrow 2s ease-out both;
+  }
+  @keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom; } to { transform: scaleY(1); } }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1); }
+  .reveal-left.visible { opacity: 1; transform: none; }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1); }
+  .reveal-right.visible { opacity: 1; transform: none; }
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+
+  /* SECTION COMMONS */
+  section { position: relative; z-index: 1; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 700;
+    line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 520px; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 2rem; }
+
+  /* WHAT SECTION */
+  .what { padding: 8rem 0; }
+  .what-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .what-steps { display: flex; flex-direction: column; gap: 0; }
+  .step-item {
+    display: flex; gap: 1.5rem; padding: 1.8rem 0; position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.3s;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+    color: var(--accent); font-weight: 500; padding-top: 0.2rem; min-width: 28px;
+  }
+  .step-content h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .step-content p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+  .what-visual {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem; position: relative; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+  .what-visual::after {
+    content: ''; position: absolute; top: -50%; right: -20%;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,201,255,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .pipeline { display: flex; flex-direction: column; gap: 0.8rem; }
+  .pipe-node {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--bg); border-radius: 10px; padding: 0.9rem 1.2rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .pipe-node:hover { border-color: var(--accent); transform: translateX(4px); }
+  .pipe-node-icon { font-size: 1.2rem; }
+  .pipe-node-text { flex: 1; }
+  .pipe-node-text .pnt { font-size: 0.85rem; font-weight: 600; }
+  .pipe-node-text .pns { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+  .pipe-status {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 8px var(--accent); animation: pulse 2s infinite;
+  }
+  .pipe-connector { width: 2px; height: 20px; background: linear-gradient(to bottom, var(--accent), var(--accent2)); margin-left: 24px; opacity: 0.4; border-radius: 2px; }
+
+  /* FEATURES */
+  .features { padding: 8rem 0; }
+  .features-header { text-align: center; margin-bottom: 5rem; }
+  .features-header .section-sub { margin: 0 auto; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .feature-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 2rem; position: relative; overflow: hidden;
+    transition: transform 0.3s cubic-bezier(.16,1,.3,1), border-color 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(61,255,160,0.03) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-8px); border-color: rgba(61,255,160,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(61,255,160,0.07); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon-wrap {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1.2rem;
+    transition: transform 0.3s;
+  }
+  .feature-card:hover .feature-icon-wrap { transform: scale(1.1) rotate(-5deg); }
+  .fi-green { background: rgba(61,255,160,0.12); }
+  .fi-blue { background: rgba(0,201,255,0.12); }
+  .fi-purple { background: rgba(139,92,246,0.12); }
+  .fi-orange { background: rgba(255,159,64,0.12); }
+  .fi-pink { background: rgba(255,100,150,0.12); }
+  .fi-yellow { background: rgba(255,220,50,0.12); }
+  .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .feature-tag {
+    display: inline-block; margin-top: 1rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); background: rgba(61,255,160,0.08); border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+  }
+
+  /* HOW IT WORKS */
+  .how { padding: 8rem 0; }
+  .how-header { text-align: center; margin-bottom: 5rem; }
+  .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .how-steps::before {
+    content: ''; position: absolute;
+    top: 38px; left: 12.5%; right: 12.5%; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    opacity: 0.4; z-index: 0;
+  }
+  .how-step { text-align: center; padding: 0 1.5rem; position: relative; z-index: 1; }
+  .how-step-num {
+    width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 2px solid var(--border);
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700;
+    position: relative; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .how-step:hover .how-step-num {
+    border-color: var(--accent); transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(61,255,160,0.2);
+    color: var(--accent);
+  }
+  .how-step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .how-step p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .how-visual-row {
+    margin-top: 5rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2.5rem;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    position: relative; overflow: hidden;
+  }
+  .how-visual-row::before {
+    content: ''; position: absolute; bottom: -40%; right: -10%;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .how-text h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+  .how-text p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+  .terminal {
+    background: #050810; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 1.5rem; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; line-height: 1.8;
+  }
+  .t-prompt { color: var(--accent); }
+  .t-cmd { color: #e8f0fe; }
+  .t-out { color: var(--muted); }
+  .t-success { color: var(--accent2); }
+  .t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); vertical-align: middle; animation: blink 1.2s step-end infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 8rem 0; }
+  .testimonials-header { text-align: center; margin-bottom: 4rem; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .testi-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 2rem; position: relative;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-6px); border-color: rgba(0,201,255,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+  .testi-stars { color: #f5a623; font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 2px; }
+  .testi-text { font-size: 0.92rem; color: var(--text); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 0.9rem; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700; font-family: 'Cormorant Garamond', serif;
+    flex-shrink: 0;
+  }
+  .av-g { background: linear-gradient(135deg, #3dffa0, #00c9ff); color: var(--bg); }
+  .av-p { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+  .av-o { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+  .testi-name { font-size: 0.9rem; font-weight: 600; }
+  .testi-role { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+
+  /* PRICING */
+  .pricing { padding: 8rem 0; }
+  .pricing-header { text-align: center; margin-bottom: 5rem; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+  .price-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2.5rem 2rem; text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .price-card:hover { transform: translateY(-6px); }
+  .price-card.featured {
+    background: linear-gradient(145deg, #0e2030, #0e2830);
+    border-color: rgba(61,255,160,0.4);
+    box-shadow: 0 0 60px rgba(61,255,160,0.1);
+    transform: scale(1.04);
+  }
+  .price-card.featured:hover { transform: scale(1.04) translateY(-6px); }
+  .plan-badge {
+    display: inline-block; background: rgba(61,255,160,0.12); color: var(--accent);
+    border-radius: 999px; padding: 0.25rem 0.9rem; font-size: 0.7rem;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  .plan-name { font-size: 1rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .plan-price {
+    font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700;
+    line-height: 1; margin-bottom: 0.3rem;
+  }
+  .plan-period { font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
+  .plan-features { list-style: none; text-align: left; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .plan-features li { font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 0.7rem; }
+  .plan-features li::before { content: '✓'; color: var(--accent); font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .plan-features li.plan-no::before { content: '×'; color: rgba(255,255,255,0.2); }
+  .plan-features li.plan-no { opacity: 0.4; }
+  .plan-btn {
+    width: 100%; padding: 0.9rem; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+    cursor: none; transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .plan-btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .plan-btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .plan-btn-solid {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; color: var(--bg);
+  }
+  .plan-btn-solid:hover { transform: scale(1.03); box-shadow: 0 8px 30px rgba(61,255,160,0.35); }
+
+  /* CTA BANNER */
+  .cta-banner {
+    padding: 8rem 0;
+    background: linear-gradient(135deg, rgba(61,255,160,0.05) 0%, rgba(0,201,255,0.05) 50%, rgba(139,92,246,0.05) 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 400px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(61,255,160,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-banner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.2rem; }
+  .cta-banner p { color: var(--muted); font-size: 1.05rem; margin-bottom: 2.5rem; }
+  .cta-input-row {
+    display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;
+  }
+  .cta-input {
+    background: rgba(255,255,255,0.05); border: 1.5px solid var(--border);
+    color: var(--text); padding: 0.9rem 1.5rem; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; min-width: 280px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .cta-input:focus { border-color: var(--accent); }
+  .cta-input::placeholder { color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 4rem 0 2rem; position: relative; z-index: 1;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: inline-block; margin-bottom: 1rem; }
+  .footer-brand p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-bottom p { font-size: 0.82rem; color: var(--muted); }
+  .footer-socials { display: flex; gap: 1rem; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    color: var(--muted); text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .social-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(61,255,160,0.08); }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 auto; max-width: 800px;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--border); border-radius: 18px;
+    background: var(--surface); overflow: hidden;
+    margin: 5rem 0;
+  }
+  .stat-item {
+    padding: 2.5rem 2rem; text-align: center; border-right: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: rgba(61,255,160,0.03); }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 700; line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .what-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .how-steps { grid-template-columns: 1fr 1fr; }
+    .how-steps::before { display: none; }
+    .how-visual-row { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .price-card.featured { transform: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .mock-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Flowmind</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <button class="nav-cta">Get Early Access</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-bg-orb orb3"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Now in Public Beta — 2,400+ Teams
+  </div>
+
+  <h1>
+    <span class="h1-gradient">Your AI co-pilot<br/>for effortless work.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Flowmind unifies your tools, automates your workflows, and helps your team move 10× faster — without the chaos of juggling a dozen apps.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary">Start for Free →</button>
+    <button class="btn-secondary">
+      <span>▶</span> Watch 2-min demo
+    </button>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="mock-bar">
+        <div class="mock-dot d1"></div>
+        <div class="mock-dot d2"></div>
+        <div class="mock-dot d3"></div>
+        <div class="mock-url">app.flowmind.ai/workspace</div>
+      </div>
+      <div class="mock-grid">
+        <div class="mock-block">
+          <div class="mock-icon">⚡</div>
+          <div class="mock-label">Tasks Done</div>
+          <div class="mock-val" style="color: var(--accent);">1,284</div>
+          <div class="mock-bar-chart">
+            <div class="mock-bar-item" style="height:60%; animation-delay:0.1s"></div>
+            <div class="mock-bar-item" style="height:80%; animation-delay:0.2s"></div>
+            <div class="mock-bar-item" style="height:50%; animation-delay:0.3s"></div>
+            <div class="mock-bar-item" style="height:90%; animation-delay:0.4s"></div>
+            <div class="mock-bar-item" style="height:70%; animation-delay:0.5s"></div>
+            <div class="mock-bar-item" style="height:100%; animation-delay:0.6s"></div>
+          </div>
+        </div>
+        <div class="mock-block">
+          <div class="mock-icon">🧠</div>
+          <div class="mock-label">AI Suggestions</div>
+          <div class="mock-val" style="color: var(--accent2);">94%</div>
+          <div style="margin-top:1rem; background: rgba(255,255,255,0.05); border-radius:4px; height:6px; overflow:hidden;">
+            <div style="height:100%; width:94%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius:4px; animation: barGrow 2s ease-out both;"></div>
+          </div>
+          <div style="font-size:0.7rem; color: var(--muted); margin-top:0.5rem;">Accuracy rate</div>
+        </div>
+        <div class="mock-block">
+          <div class="mock-icon">🚀</div>
+          <div class="mock-label">Time Saved</div>
+          <div class="mock-val" style="color: #8b5cf6;">18h</div>
+          <div style="font-size:0.7rem; color: var(--muted); margin-top:0.8rem;">This week alone</div>
+          <div style="font-size:0.75rem; color: var(--accent); margin-top:0.3rem; font-weight:600;">↑ +24% vs last week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container">
+  <div class="stats-row reveal">
+    <div class="stat-item">
+      <div class="stat-val">2.4K+</div>
+      <div class="stat-label">Teams Onboard</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">98%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">10×</div>
+      <div class="stat-label">Avg Productivity Gain</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">$0</div>
+      <div class="stat-label">To Get Started</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IT DOES -->
+<section class="what" id="what">
+  <div class="container">
+    <div class="what-inner">
+      <div class="reveal-left">
+        <span class="section-label">What is Flowmind?</span>
+        <h2 class="section-title">Work smarter.<br/>Build faster.<br/>Ship better.</h2>
+        <p class="section-sub" style="margin-bottom:3rem;">Flowmind is your intelligent workspace — it connects to your existing tools, learns your workflow, and removes every bottleneck between idea and execution.</p>
+        <div class="what-steps">
+          <div class="step-item">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h3>Connect your stack</h3>
+              <p>Plug in Notion, Slack, Linear, GitHub, and 80+ tools in one click. No setup wizards, no IT tickets.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h3>AI learns your patterns</h3>
+              <p>Our contextual engine watches how you work and surfaces the right information at exactly the right moment.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h3>Automate the repetitive</h3>
+              <p>Flowmind handles standups, status updates, and routing decisions so your team focuses on real work.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="what-visual">
+          <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:1.2rem; font-weight:600;">Live Workflow Engine</div>
+          <div class="pipeline">
+            <div class="pipe-node">
+              <div class="pipe-node-icon">📥</div>
+              <div class="pipe-node-text">
+                <div class="pnt">New task from Slack</div>
+                <div class="pns">Parsed 3 seconds ago</div>
+              </div>
+              <div class="pipe-status"></div>
+            </div>
+            <div class="pipe-connector"></div>
+            <div class="pipe-node">
+              <div class="pipe-node-icon">🧠</div>
+              <div class="pipe-node-text">
+                <div class="pnt">AI categorizes & prioritizes</div>
+                <div class="pns">Assigned to Sprint #12</div>
+              </div>
+              <div class="pipe-status" style="background:var(--accent2); box-shadow: 0 0 8px var(--accent2);"></div>
+            </div>
+            <div class="pipe-connector" style="background: linear-gradient(to bottom, var(--accent2), var(--accent3));"></div>
+            <div class="pipe-node">
+              <div class="pipe-node-icon">🔗</div>
+              <div class="pipe-node-text">
+                <div class="pnt">Synced to Linear + GitHub</div>
+                <div class="pns">Issue #484 created automatically</div>
+              </div>
+              <div class="pipe-status" style="background:var(--accent3); box-shadow: 0 0 8px var(--accent3);"></div>
+            </div>
+            <div class="pipe-connector" style="background: linear-gradient(to bottom, var(--accent3), #f59e0b);"></div>
+            <div class="pipe-node">
+              <div class="pipe-node-icon">✅</div>
+              <div class="pipe-node-text">
+                <div class="pnt">Team notified & task live</div>
+                <div class="pns">Done in 0.8s, zero manual steps</div>
+              </div>
+              <div class="pipe-status" style="background:#f59e0b; box-shadow: 0 0 8px #f59e0b;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="section-divider"></div></div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-header reveal">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything your team needs.<br/>Nothing you don't.</h2>
+      <p class="section-sub">Built for speed. Designed for scale. Loved by humans.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon-wrap fi-green">🧠</div>
+        <h3>Contextual AI Memory</h3>
+        <p>Flowmind remembers your decisions, past work, and team preferences — surfacing the right context before you even ask.</p>
+        <span class="feature-tag">Core AI</span>
+      </div>
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon-wrap fi-blue">⚡</div>
+        <h3>Instant Automations</h3>
+        <p>Set up powerful no-code workflows in seconds. Trigger actions across 80+ tools with natural language commands.</p>
+        <span class="feature-tag">Automation</span>
+      </div>
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon-wrap fi-purple">🔮</div>
+        <h3>Predictive Insights</h3>
+        <p>Get ahead of blockers before they happen. Flowmind analyzes patterns and flags risks in your pipeline proactively.</p>
+        <span class="feature-tag">Analytics</span>
+      </div>
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon-wrap fi-orange">🔗</div>
+        <h3>Universal Integrations</h3>
+        <p>Works with your existing stack out of the box. Notion, Slack, GitHub, Figma, Jira, and 75+ more integrations.</p>
+        <span class="feature-tag">Integrations</span>
+      </div>
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon-wrap fi-pink">🛡️</div>
+        <h3>Enterprise-grade Security</h3>
+        <p>SOC 2 Type II certified. End-to-end encryption. Your data stays yours — always private, always protected.</p>
+        <span class="feature-tag">Security</span>
+      </div>
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon-wrap fi-yellow">📊</div>
+        <h3>Real-time Dashboards</h3>
+        <p>Beautiful, live analytics across every project. Know exactly where your team stands — at a glance, any time.</p>
+        <span class="feature-tag">Visibility</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="section-divider"></div></div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Up and running in minutes.</h2>
+      <p class="section-sub" style="margin:0 auto;">No training required. No migration headaches. Just connect, and go.</p>
+    </div>
+
+    <div class="how-steps">
+      <div class="how-step reveal delay-1">
+        <div class="how-step-num">1</div>
+        <h3>Connect Your Tools</h3>
+        <p>Link your existing stack with one-click OAuth. Zero configuration needed.</p>
+      </div>
+      <div class="how-step reveal delay-2">
+        <div class="how-step-num">2</div>
+        <h3>Set Your Goals</h3>
+        <p>Tell Flowmind what matters. It builds your workspace around your priorities.</p>
+      </div>
+      <div class="how-step reveal delay-3">
+        <div class="how-step-num">3</div>
+        <h3>AI Takes Over</h3>
+        <p>Watch as Flowmind automates busywork and routes everything intelligently.</p>
+      </div>
+      <div class="how-step reveal delay-4">
+        <div class="how-step-num">4</div>
+        <h3>Ship Faster</h3>
+        <p>Your team delivers. Every. Single. Time. With full visibility and zero friction.</p>
+      </div>
+    </div>
+
+    <div class="how-visual-row reveal">
+      <div class="how-text">
+        <h3>See the magic in real time.</h3>
+        <p>Watch Flowmind parse a Slack message, create a Linear ticket, assign it to the right person, and post an update — all in under a second.</p>
+        <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap;">
+          <span style="font-size:0.78rem; background:rgba(61,255,160,0.1); color:var(--accent); padding:0.3rem 0.8rem; border-radius:6px; font-weight:600;">0.8s avg response</span>
+          <span style="font-size:0.78rem; background:rgba(0,201,255,0.1); color:var(--accent2); padding:0.3rem 0.8rem; border-radius:6px; font-weight:600;">Zero-touch execution</span>
+        </div>
+      </div>
+      <div class="terminal">
+        <div><span class="t-prompt">$</span> <span class="t-cmd">flowmind connect --slack --github --linear</span></div>
+        <div class="t-out">▸ Authenticating Slack workspace... <span style="color:var(--accent)">✓</span></div>
+        <div class="t-out">▸ Scanning GitHub repos... <span style="color:var(--accent)">✓</span></div>
+        <div class="t-out">▸ Syncing Linear projects... <span style="color:var(--accent)">✓</span></div>
+        <div style="height:0.4rem;"></div>
+        <div><span class="t-prompt">$</span> <span class="t-cmd">flowmind ai analyze --week</span></div>
+        <div class="t-out">▸ Analyzing 1,284 events...</div>
+        <div class="t-out">▸ Detected 14 automation opportunities</div>
+        <div class="t-success">✓ Saved ~18h of team time this week</div>
+        <div style="height:0.4rem;"></div>
+        <div><span class="t-prompt">$</span> <span class="t-cmd">flowmind run workflow "sprint-standup"</span></div>
+        <div class="t-success">✓ Standup posted to #engineering in 0.3s</div>
+        <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="section-divider"></div></div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <span class="section-label">Testimonials</span>
+      <h2 class="section-title">Loved by teams<br/>who ship fast.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Flowmind replaced literally six of our tools. Our sprints are tighter, our standups are shorter, and the team is happier. I wish we'd switched sooner."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-g">S</div>
+          <div>
+            <div class="testi-name">Sarah Chen</div>
+            <div class="testi-role">CTO, Orbit Labs</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The AI memory feature is genuinely eerie in the best way. It knows what I'm about to need before I know it. Productivity is up 3× since we onboarded."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-p">M</div>
+          <div>
+            <div class="testi-name">Marcus Reyes</div>
+            <div class="testi-role">Lead Engineer, Helia</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal delay-3">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"We cut our project overhead by 60% in the first month. The automation setup took 20 minutes. The ROI is insane. Every product team needs this."</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-o">A</div>
+          <div>
+            <div class="testi-name">Anika Patel</div>
+            <div class="testi-role">VP Product, Sunspark</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="section-divider"></div></div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Simple, transparent pricing.</h2>
+      <p class="section-sub" style="margin:0 auto;">Start free. Scale as you grow. No hidden fees, ever.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal delay-1">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-period">Free forever</div>
+        <ul class="plan-features">
+          <li>Up to 3 team members</li>
+          <li>5 active automations</li>
+          <li>10 integrations</li>
+          <li>7-day AI memory</li>
+          <li class="plan-no">Advanced analytics</li>
+          <li class="plan-no">Priority support</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline">Get Started Free</button>
+      </div>
+      <div class="price-card featured reveal delay-2">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price" style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$29</div>
+        <div class="plan-period">per user / month</div>
+        <ul class="plan-features">
+          <li>Unlimited team members</li>
+          <li>Unlimited automations</li>
+          <li>80+ integrations</li>
+          <li>90-day AI memory</li>
+          <li>Advanced analytics</li>
+          <li class="plan-no">Dedicated support</li>
+        </ul>
+        <button class="plan-btn plan-btn-solid">Start 14-day Trial</button>
+      </div>
+      <div class="price-card reveal delay-3">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-period">Talk to our team</div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Unlimited AI memory</li>
+          <li>Custom integrations</li>
+          <li>SOC 2 compliance</li>
+          <li>SLA guarantee</li>
+          <li>Dedicated CSM</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Ready to ship 10× faster?</span>
+      <h2>Stop managing work.<br/>Start <span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">flowing</span> through it.</h2>
+      <p>Join 2,400+ teams who made the switch. No credit card required.</p>
+      <div class="cta-input-row">
+        <input class="cta-input" type="email" placeholder="Enter your work email..." />
+        <button class="btn-primary">Get Early Access →</button>
+      </div>
+      <p style="font-size:0.78rem; color:var(--muted); margin-top:1rem;">Free 14-day trial · No credit card · Cancel anytime</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">Flowmind</div>
+        <p>The intelligent workspace that connects your tools, your team, and your goals — so you can focus on what matters.</p>
+        <div style="margin-top:1.5rem; display:flex; gap:0.5rem;">
+          <span style="font-size:0.72rem; background:rgba(61,255,160,0.08); color:var(--accent); padding:0.25rem 0.7rem; border-radius:5px; font-weight:600;">SOC 2</span>
+          <span style="font-size:0.72rem; background:rgba(61,255,160,0.08); color:var(--accent); padding:0.25rem 0.7rem; border-radius:5px; font-weight:600;">GDPR</span>
+          <span style="font-size:0.72rem; background:rgba(61,255,160,0.08); color:var(--accent); padding:0.25rem 0.7rem; border-radius:5px; font-weight:600;">HIPAA</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">Roadmap</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">API Docs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press Kit</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Settings</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Flowmind, Inc. All rights reserved.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="#">𝕏</a>
+        <a class="social-btn" href="#">in</a>
+        <a class="social-btn" href="#">gh</a>
+        <a class="social-btn" href="#">yt</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Parallax on orbs
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx;
+    const dy = (e.clientY - cy) / cy;
+    document.querySelectorAll('.hero-bg-orb').forEach((orb, i) => {
+      const depth = (i + 1) * 12;
+      orb.style.transform = `translate(${dx * depth}px, ${dy * depth}px)`;
+    });
+  });
+
+  // Animate stat counters
+  function animateCounter(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1800;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const val = Math.round(ease * target);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const vals = entry.target.querySelectorAll('.stat-val');
+        const data = [2400, 98, 10, 0];
+        const suffixes = ['+', '%', '×', ''];
+        vals.forEach((el, i) => animateCounter(el, data[i], suffixes[i]));
+        statsObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  const statsRow = document.querySelector('.stats-row');
+  if (statsRow) statsObs.observe(statsRow);
+
+  // Button ripple
+  document.querySelectorAll('.btn-primary, .nav-cta, .plan-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.style.cssText = `
+        position:absolute; border-radius:50%; background:rgba(255,255,255,0.25);
+        width:0; height:0; left:${e.clientX - rect.left}px; top:${e.clientY - rect.top}px;
+        transform:translate(-50%,-50%); animation:ripple 0.5s ease-out;
+        pointer-events:none;
+      `;
+      this.style.position = 'relative'; this.style.overflow = 'hidden';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 500);
+    });
+  });
+
+  // Add ripple keyframe
+  const style = document.createElement('style');
+  style.textContent = '@keyframes ripple { to { width:200px; height:200px; opacity:0; } }';
+  document.head.appendChild(style);
+</script>
+</body>
+</html>
