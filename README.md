@@ -82,8 +82,11 @@ docker run -d -p 5000:5000 --name flask-v1 flask-app:v1
 If error occurs replace 5000:5000 port mapping to 5001:5000, 5002...:5000. If and only when 5000 port is occupied by other application. 
 
 ### 4. Access the App
-Open your browser and go to:
-`http://localhost:5000`
+### Open your browser and go to: `http://localhost:5000`
+\
+**If Port Changed**: In place of 5000 place your port that you replaced with. 
+\
+eg. `http://localhost:5001` for `5001`. 
 
 ### 5. App Structure
 ```
