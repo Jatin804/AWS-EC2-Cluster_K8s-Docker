@@ -1,1066 +1,657 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ITE Infortech Institute – Master the Digital Future</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<style>
-  :root {
-    /* Old Style Vintage Palette */
-    --ink: #2b2218;             /* Deep charcoal/sepia */
-    --cream: #f4eedc;           /* Old parchment paper */
-    --gold: #b8860b;            /* Antique gold */
-    --gold-light: #d4b886;      /* Faded gold */
-    --rust: #8b3a2a;            /* Faded brick red */
-    --primary-dark: #3e2723;    /* Replaces teal - Deep Mahogany */
-    --primary-light: #5d4037;   /* Replaces teal-light - Warm Brown */
-    --red: #8b0000;             /* Classic vintage red */
-    --muted: #6b5b4d;           /* Muted vintage brown */
-    --border: rgba(184, 134, 11, 0.25);
-  }
-  
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ITE Infotech Institute — Master the Future of Tech</title>
 
-  html { scroll-behavior: smooth; }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-  body {
-    font-family: 'Crimson Pro', Georgia, serif;
-    background: var(--cream);
-    color: var(--ink);
-    overflow-x: hidden;
-  }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
-  /* ── CUSTOM CURSOR ── */
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: transform 0.08s, width 0.2s, height 0.2s, background 0.2s;
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#07090f;--bg2:#0c0f1a;--surface:#101422;--panel:#141828;--panel2:#181d2e;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+    --amber:#b8935a;--amber-lt:#d4aa72;--amber-dim:rgba(184,147,90,0.15);
+    --slate:#4a7fa5;--slate-lt:#6a9dc0;--slate-dim:rgba(74,127,165,0.15);
+    --teal:#2e9e8a;--teal-dim:rgba(46,158,138,0.12);
+    --crimson:#b03030;--crimson-dim:rgba(176,48,48,0.12);
+    --text:#dde2ea;--text-dim:#8e96a8;--text-faint:#525a6b;
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+    --radius:10px;--radius-lg:16px;
+    --glow-amber:0 0 36px rgba(184,147,90,0.22);
+    --nav-h:70px;
   }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--gold);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%,-50%);
-    transition: transform 0.18s ease, width 0.2s, height 0.2s, opacity 0.2s;
-    opacity: 0.6;
-  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  @media(hover:hover)and(pointer:fine){body{cursor:none}}
+  ::selection{background:var(--amber);color:#000}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%}
+  button{font-family:var(--sans)}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 1.4rem 4rem;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(244, 238, 220, 0.92);
-    backdrop-filter: blur(14px);
-    border-bottom: 0.5px solid var(--border);
-    transition: all 0.3s ease;
-  }
-  .nav-logo {
-    font-family: 'Dancing Script', cursive;
-    font-size: 2rem;
-    color: var(--primary-dark);
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-  .nav-logo span { color: var(--gold); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
-  .nav-links a {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    text-decoration: none;
-    position: relative;
-    transition: color 0.2s;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
-    background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.3s;
-  }
-  .nav-links a:hover { color: var(--primary-dark); }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-cta {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem; letter-spacing: 0.1em;
-    padding: 0.55rem 1.6rem;
-    border: 1px solid var(--gold);
-    color: var(--primary-dark);
-    background: transparent;
-    cursor: pointer;
-    transition: background 0.25s, color 0.25s;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .nav-cta:hover { background: var(--gold); color: var(--cream); }
+  /* CURSOR */
+  #cur-dot,#cur-ring{position:fixed;top:0;left:0;z-index:9999;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;will-change:left,top}
+  #cur-dot{width:7px;height:7px;background:var(--amber);z-index:10000;transition:width .15s,height .15s,background .2s}
+  #cur-ring{width:34px;height:34px;border:1.5px solid rgba(184,147,90,.55);opacity:.7;transition:width .28s,height .28s,border-color .28s,opacity .28s}
+  body.cur-hov #cur-dot{width:10px;height:10px;background:var(--amber-lt)}
+  body.cur-hov #cur-ring{width:52px;height:52px;border-color:var(--slate-lt);opacity:1}
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 8rem 2rem 4rem;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    background: var(--primary-dark);
-  }
-  .hero-bg-pattern {
-    position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(184,134,11,0.06) 60px),
-      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(184,134,11,0.06) 60px);
-    pointer-events: none;
-  }
-  .hero-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-  }
-  .orb1 { width: 600px; height: 600px; background: rgba(184,134,11,0.15); top: -200px; right: -200px; }
-  .orb2 { width: 400px; height: 400px; background: rgba(139,58,42,0.2); bottom: -100px; left: -100px; }
-  .hero-tag {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.4rem;
-    color: var(--gold-light);
-    letter-spacing: 0.04em;
-    margin-bottom: 1.2rem;
-    opacity: 0;
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 8vw, 7rem);
-    font-weight: 700;
-    color: var(--cream);
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    opacity: 0;
-  }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-  .hero-sub {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-    font-weight: 300;
-    color: rgba(244,238,220,0.8);
-    max-width: 680px;
-    line-height: 1.7;
-    margin: 1.8rem auto 0;
-    opacity: 0;
-  }
-  .hero-actions {
-    display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
-    margin-top: 3rem;
-    opacity: 0;
-    width: 100%;
-  }
-  .btn-primary {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.9rem 2.8rem;
-    background: var(--gold);
-    color: var(--primary-dark);
-    border: none; cursor: pointer;
-    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-    width: auto;
-  }
-  .btn-primary:hover { background: #cf9c15; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(184,134,11,0.3); }
-  .btn-outline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.9rem 2.8rem;
-    background: transparent;
-    color: var(--cream);
-    border: 1px solid rgba(244,238,220,0.4);
-    cursor: pointer;
-    transition: border-color 0.25s, color 0.25s;
-    width: auto;
-  }
-  .btn-outline:hover { border-color: var(--gold-light); color: var(--gold-light); }
-  .hero-scroll-hint {
-    position: absolute; bottom: 2.5rem;
-    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-    font-family: 'Dancing Script', cursive;
-    font-size: 1rem; color: rgba(244,238,220,0.5);
-    animation: bounce 2s infinite;
-  }
-  .scroll-line { width: 1px; height: 40px; background: rgba(184,134,11,0.5); }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--amber);border-radius:2px}
 
-  /* ── STATS BAND ── */
-  .stats-band {
-    background: var(--gold);
-    padding: 2.5rem 4rem;
-    display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem;
-  }
-  .stat-item { text-align: center; flex: 1; min-width: 150px; }
-  .stat-number {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 700;
-    color: var(--primary-dark);
-    line-height: 1;
-  }
-  .stat-label {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.2rem;
-    color: var(--primary-dark);
-    opacity: 0.85;
-    margin-top: 0.4rem;
-  }
+  /* NOISE */
+  body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity:.022}
 
-  /* ── SECTIONS ── */
-  section { padding: 6rem 4rem; }
-  .section-tag {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.4rem;
-    color: var(--gold);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.8rem;
-    display: block;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    color: var(--primary-dark);
-    line-height: 1.15;
-  }
-  .section-title em { font-style: italic; color: var(--rust); }
-  .section-line {
-    width: 60px; height: 2px;
-    background: var(--gold);
-    margin: 1.2rem 0 2rem;
-  }
-  .section-desc {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.2rem;
-    font-weight: 300;
-    color: var(--muted);
-    max-width: 620px;
-    line-height: 1.85;
-  }
+  /* UTIL */
+  .container{max-width:1200px;margin:0 auto;padding:0 56px}
+  @media(max-width:900px){.container{padding:0 28px}}
+  @media(max-width:540px){.container{padding:0 18px}}
+  .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+  .reveal{opacity:0;transform:translateY(30px)}
+  .reveal.in{opacity:1;transform:translateY(0);transition:opacity .75s ease,transform .75s ease}
 
-  /* ── ABOUT ── */
-  .about { background: var(--cream); }
-  .about-inner {
-    max-width: 1200px; margin: auto;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
-  }
-  .about-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.8rem, 3vw, 2.2rem); font-weight: 300; font-style: italic;
-    color: var(--primary-dark);
-    line-height: 1.4;
-    padding-left: 2rem;
-    border-left: 3px solid var(--gold);
-    margin-top: 2rem;
-  }
-  .about-img-wrap {
-    position: relative;
-    padding: 1.5rem 0 0 1.5rem;
-    width: 100%;
-  }
-  .about-img-box {
-    width: 100%; aspect-ratio: 4/3;
-    background: var(--primary-dark);
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .about-img-box::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(184,134,11,0.1) 15px);
-  }
-  .about-img-text {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(3rem, 6vw, 5rem); color: var(--gold); opacity: 0.4;
-    z-index: 1;
-  }
-  .about-img-accent {
-    position: absolute; top: 0; left: 0;
-    width: 60%; height: 60%;
-    border-top: 2px solid var(--gold);
-    border-left: 2px solid var(--gold);
-  }
+  .section-tag{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:18px}
+  .section-tag::before{content:'';display:block;width:32px;height:1px;background:var(--amber)}
+  .section-title{font-family:var(--serif);font-size:clamp(34px,5vw,60px);font-weight:400;line-height:1.1;letter-spacing:-.4px;margin-bottom:20px}
+  .section-title em{font-style:italic;color:var(--amber)}
+  .section-sub{font-family:var(--sans);font-size:15px;line-height:1.8;color:var(--text-dim);max-width:520px}
 
-  /* ── COURSES ── */
-  .courses { background: #ebe3d1; /* Darker vintage paper */ }
-  .courses-inner { max-width: 1200px; margin: auto; }
-  .courses-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.8rem;
-    margin-top: 3rem;
-  }
-  .course-card {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    padding: 2rem;
-    position: relative; overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-  }
-  .course-card::before {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-    background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s;
-  }
-  .course-card:hover { transform: translateY(-6px); box-shadow: 0 15px 40px rgba(43,34,24,0.15); }
-  .course-card:hover::before { transform: scaleX(1); }
-  .course-icon {
-    font-size: 2.4rem; margin-bottom: 1rem;
-    display: flex; align-items: center; justify-content: center;
-    width: 58px; height: 58px;
-    background: rgba(62,39,35,0.06);
-    border-radius: 0;
-  }
-  .course-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: 0.6rem;
-  }
-  .course-desc {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.05rem; font-weight: 300;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  .course-meta {
-    margin-top: 1.4rem;
-    display: flex; gap: 0.8rem; flex-wrap: wrap;
-  }
-  .badge {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-  .badge.featured { background: var(--primary-dark); color: var(--gold-light); border-color: var(--primary-dark); }
+  /* BUTTONS */
+  .btn-primary{display:inline-block;background:var(--amber);color:#000;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:15px 38px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .25s,box-shadow .3s,transform .2s;position:relative;overflow:hidden}
+  .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .55s}
+  .btn-primary:hover::after{transform:translateX(100%)}
+  .btn-primary:hover{background:var(--amber-lt);box-shadow:var(--glow-amber);transform:translateY(-2px)}
+  .btn-ghost{display:inline-block;background:transparent;color:var(--text);font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:15px 38px;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;transition:border-color .25s,color .25s,transform .2s}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
 
-  /* ── PATHS / ROADMAP ── */
-  .paths { background: var(--primary-dark); }
-  .paths .section-title { color: var(--cream); }
-  .paths .section-desc { color: rgba(244,238,220,0.7); }
-  .paths .section-tag { color: var(--gold-light); }
-  .paths .section-line { background: var(--gold-light); }
-  .paths-inner { max-width: 1100px; margin: auto; }
-  .path-list { margin-top: 3rem; display: flex; flex-direction: column; gap: 0; }
-  .path-item {
-    display: grid; grid-template-columns: 150px 1fr;
-    border-top: 1px solid rgba(184,134,11,0.25);
-    padding: 2.5rem 0;
-    transition: background 0.2s;
-    gap: 2rem; align-items: start;
-  }
-  .path-item:last-child { border-bottom: 1px solid rgba(184,134,11,0.25); }
-  .path-item:hover { background: rgba(184,134,11,0.06); }
-  .path-num {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700;
-    color: rgba(184,134,11,0.25);
-    line-height: 1;
-  }
-  .path-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem; font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 0.8rem;
-  }
-  .path-desc {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.1rem; font-weight: 300;
-    color: rgba(244,238,220,0.7);
-    line-height: 1.7; max-width: 700px;
-  }
-  .path-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
-  .path-tag {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid rgba(184,134,11,0.4);
-    color: var(--gold-light);
-  }
+  /* NAV */
+  #navbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(7,9,15,0.82);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--border);transition:background .4s,box-shadow .4s}
+  #navbar.scrolled{background:rgba(7,9,15,0.97);box-shadow:0 4px 30px rgba(0,0,0,.4)}
+  @media(max-width:860px){#navbar{padding:0 20px}}
 
-  /* ── TOOLS ── */
-  .tools { background: var(--cream); }
-  .tools-inner { max-width: 1100px; margin: auto; }
-  .tools-grid {
-    display: flex; flex-wrap: wrap; gap: 0.8rem;
-    margin-top: 2.5rem;
-  }
-  .tool-chip {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem; letter-spacing: 0.04em;
-    padding: 0.6rem 1.4rem;
-    border: 1px solid var(--border);
-    color: var(--primary-dark);
-    background: transparent;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-    cursor: default;
-  }
-  .tool-chip:hover { background: var(--primary-dark); color: var(--gold-light); transform: translateY(-2px); }
+  .nav-logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .logo-mark{width:40px;height:40px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:1px;color:#000;flex-shrink:0}
+  .logo-text{display:flex;flex-direction:column;line-height:1.2}
+  .logo-text .lname{font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:1.5px;color:var(--text);text-transform:uppercase}
+  .logo-text .lsub{font-family:var(--serif);font-style:italic;font-size:11px;color:var(--text-dim)}
 
-  /* ── TESTIMONIALS ── */
-  .testimonials { background: #ebe3d1; }
-  .testimonials-inner { max-width: 1100px; margin: auto; }
-  .testimonials-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem; margin-top: 3rem;
-  }
-  .testi-card {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem 2rem;
-    position: relative;
-  }
-  .testi-quote-mark {
-    font-family: 'Playfair Display', serif;
-    font-size: 6rem; color: var(--gold);
-    opacity: 0.25;
-    line-height: 0.6;
-    margin-bottom: 1rem;
-    display: block;
-  }
-  .testi-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.25rem; font-style: italic; font-weight: 400;
-    color: var(--primary-dark);
-    line-height: 1.7;
-  }
-  .testi-author {
-    margin-top: 1.8rem;
-    display: flex; align-items: center; gap: 1rem;
-  }
-  .testi-avatar {
-    width: 48px; height: 48px;
-    background: var(--primary-dark);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem; color: var(--gold-light);
-  }
-  .testi-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem; font-weight: 600; color: var(--primary-dark);
-  }
-  .testi-role {
-    font-family: 'Crimson Pro', serif;
-    font-size: 0.95rem; font-weight: 300; color: var(--muted);
-  }
+  .nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+  .nav-links a{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--text-dim);padding:8px 14px;border-radius:6px;transition:color .2s,background .2s;white-space:nowrap}
+  .nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .nav-links a.active{color:var(--amber)}
+  .nav-cta{margin-left:10px!important;background:var(--amber)!important;color:#000!important;font-weight:700!important;padding:9px 22px!important;border-radius:7px!important;transition:background .25s,box-shadow .25s!important}
+  .nav-cta:hover{background:var(--amber-lt)!important;box-shadow:var(--glow-amber)!important}
 
-  /* ── CTA ── */
-  .cta-section {
-    background: var(--rust);
-    padding: 7rem 2rem;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .cta-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(135deg, transparent, transparent 30px, rgba(244,238,220,0.05) 31px);
-  }
-  .cta-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    font-weight: 700; font-style: italic;
-    color: var(--cream);
-    margin-bottom: 1.2rem;
-    position: relative;
-  }
-  .cta-sub {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.25rem; font-weight: 300;
-    color: rgba(244,238,220,0.8);
-    max-width: 560px; margin: 0 auto 2.5rem;
-    line-height: 1.7;
-    position: relative;
-  }
-  .cta-form {
-    display: flex; gap: 0; max-width: 500px; margin: auto;
-    position: relative;
-    width: 100%;
-  }
-  .cta-input {
-    flex: 1;
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.1rem;
-    padding: 1rem 1.5rem;
-    border: 1px solid rgba(244,238,220,0.4);
-    background: rgba(244,238,220,0.1);
-    color: var(--cream);
-    outline: none;
-    min-width: 0; /* fixes flexbox overflow */
-  }
-  .cta-input::placeholder { color: rgba(244,238,220,0.6); }
-  .cta-input:focus { border-color: var(--gold-light); }
-  .cta-btn {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 1rem 2rem;
-    background: var(--gold);
-    color: var(--primary-dark);
-    border: none; cursor: pointer;
-    transition: background 0.25s;
-    white-space: nowrap;
-  }
-  .cta-btn:hover { background: #cf9c15; }
+  .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;border:none;background:none;padding:3px;cursor:pointer;flex-shrink:0}
+  .hamburger span{display:block;width:22px;height:2px;background:var(--amber);border-radius:2px;transition:transform .3s,opacity .3s,width .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0;width:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--ink);
-    color: rgba(244,238,220,0.6);
-    padding: 5rem 4rem 2rem;
-  }
-  .footer-inner {
-    max-width: 1200px; margin: auto;
-    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
-    margin-bottom: 4rem;
-  }
-  .footer-logo {
-    font-family: 'Dancing Script', cursive;
-    font-size: 2.6rem;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
-  }
-  .footer-about {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.05rem; font-weight: 300;
-    line-height: 1.8;
-    color: rgba(244,238,220,0.6);
-    max-width: 350px;
-  }
-  .footer-heading {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 1.4rem;
-  }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin: 0; padding: 0; }
-  .footer-links a {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.05rem; font-weight: 300;
-    color: rgba(244,238,220,0.55);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--gold-light); }
-  .footer-bottom {
-    border-top: 1px solid rgba(244,238,220,0.1);
-    padding-top: 2rem;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem; letter-spacing: 0.05em;
-    color: rgba(244,238,220,0.4);
-  }
+  .mob-drawer{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:rgba(7,9,15,0.98);backdrop-filter:blur(24px);z-index:999;display:flex;flex-direction:column;align-items:flex-start;padding:40px 28px;transform:translateX(105%);transition:transform .38s cubic-bezier(.77,0,.175,1);overflow-y:auto}
+  .mob-drawer.open{transform:translateX(0)}
+  .mob-nav{display:flex;flex-direction:column;gap:0;width:100%}
+  .mob-nav a{font-family:var(--sans);font-size:20px;font-weight:500;color:var(--text-dim);padding:16px 0;border-bottom:1px solid var(--border);transition:color .2s;display:block}
+  .mob-nav a:hover{color:var(--amber)}
+  .mob-cta-btn{margin-top:32px;width:100%;background:var(--amber);color:#000;font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:1px;padding:16px;border-radius:8px;border:none;cursor:pointer;text-align:center;transition:background .25s;display:block}
+  .mob-cta-btn:hover{background:var(--amber-lt)}
 
-  /* ── SCROLL REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(30px); }
-  .reveal.visible { animation: fadeUp 0.7s ease forwards; }
-  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+  @media(max-width:860px){.nav-links{display:none}.hamburger{display:flex}}
+  @media(min-width:861px){.mob-drawer{display:none!important}.hamburger{display:none!important}}
 
-  /* ── MARQUEE ── */
-  .marquee-wrap { background: var(--gold); padding: 0.8rem 0; overflow: hidden; }
-  .marquee-track {
-    display: flex; gap: 3rem; white-space: nowrap;
-    animation: marquee 25s linear infinite;
-  }
-  .marquee-item {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.25rem; color: var(--primary-dark);
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-  }
-  .marquee-dot { color: var(--rust); margin: 0 0.5rem; }
-  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  /* HERO */
+  #home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:calc(var(--nav-h) + 60px) 56px 110px}
+  @media(max-width:600px){#home{padding:calc(var(--nav-h) + 40px) 18px 80px}}
+  #particles-js{position:absolute;inset:0;z-index:0}
+  .hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(184,147,90,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(184,147,90,.035) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 75% 75% at 50% 45%,black 40%,transparent 100%);mask-image:radial-gradient(ellipse 75% 75% at 50% 45%,black 40%,transparent 100%)}
+  .hero-inner{position:relative;z-index:2;max-width:860px;text-align:center;width:100%;margin:0 auto}
+  .hero-badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--slate-lt);text-transform:uppercase;border:1px solid rgba(74,127,165,.3);background:rgba(74,127,165,.06);padding:8px 20px;border-radius:40px;margin-bottom:32px;backdrop-filter:blur(6px)}
+  .hero-badge::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+  .hero-title{font-family:var(--serif);font-size:clamp(44px,8.5vw,104px);font-weight:400;line-height:.95;letter-spacing:-1.5px;margin-bottom:10px}
+  .hero-title .italic-line{display:block;font-style:italic;color:var(--amber);font-weight:400}
+  .hero-title .bold-line{display:block;font-family:var(--sans);font-weight:700;font-size:clamp(26px,4.5vw,56px);letter-spacing:5px;color:var(--text);text-transform:uppercase;margin-top:6px}
+  .hero-sub{font-family:var(--serif);font-style:italic;font-size:clamp(15px,2vw,20px);color:var(--text-dim);line-height:1.75;max-width:540px;margin:28px auto 44px}
+  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
-  /* number animation */
-  .count { display: inline-block; }
+  .hero-stats{position:relative;z-index:2;display:flex;justify-content:center;flex-wrap:wrap;margin-top:68px;background:var(--panel);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;max-width:740px;width:100%;margin-left:auto;margin-right:auto}
+  .stat-item{flex:1;min-width:130px;padding:26px 20px;text-align:center;border-right:1px solid var(--border)}
+  .stat-item:last-child{border-right:none}
+  .stat-num{font-family:var(--serif);font-size:42px;font-weight:400;color:var(--amber);display:block;line-height:1}
+  .stat-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;display:block;margin-top:7px}
+  @media(max-width:600px){.stat-item{min-width:110px;padding:20px 12px}.stat-num{font-size:34px}}
 
-  /* ── MOBILE OPTIMIZATION OVERRIDES ── */
-  @media (max-width: 992px) {
-    .about-inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
-    .about-quote { border-left: none; border-top: 3px solid var(--gold); padding-left: 0; padding-top: 1.5rem; }
-    .footer-inner { grid-template-columns: 1fr 1fr; }
-  }
+  .scroll-hint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text-faint);text-transform:uppercase}
+  .scroll-bar{width:1px;height:42px;background:linear-gradient(to bottom,var(--amber),transparent);animation:scrollAnim 2s ease-in-out infinite}
+  @keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top;opacity:1}50%{transform:scaleY(1);transform-origin:top;opacity:1}100%{transform:scaleY(1);transform-origin:bottom;opacity:0}}
+  @media(max-width:600px){.scroll-hint{display:none}}
 
-  @media (max-width: 768px) {
-    nav { padding: 1rem; flex-direction: column; gap: 1rem; }
-    .nav-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
-    .hero { padding-top: 11rem; } /* Account for taller nav */
-    section { padding: 4rem 1.5rem; }
-    .stats-band { flex-direction: column; padding: 3rem 1.5rem; }
-    .path-item { grid-template-columns: 1fr; gap: 0.8rem; text-align: center; }
-    .path-tags { justify-content: center; }
-    .cta-form { flex-direction: column; }
-    .cta-btn { width: 100%; }
-    .footer-inner { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
-    .footer-about { margin: 0 auto; }
-    .footer-bottom { flex-direction: column; text-align: center; }
-  }
-</style>
+  /* TICKER */
+  .ticker-wrap{background:var(--amber);padding:12px 0;overflow:hidden;position:relative;z-index:2}
+  .ticker-track{display:flex;white-space:nowrap;animation:tickerMove 22s linear infinite}
+  .ticker-track span{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:#000;padding:0 28px}
+  .ticker-track .dsep{opacity:.3;padding:0}
+  @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* COURSES */
+  #courses{padding:110px 0 120px;background:var(--bg2);position:relative;overflow:hidden}
+  .courses-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:56px}
+  .courses-hd .note{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--text-dim);line-height:1.7;max-width:320px}
+  .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:1020px){.courses-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.courses-grid{grid-template-columns:1fr}}
+
+  .c-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:34px 28px 28px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:border-color .35s,transform .35s,box-shadow .35s;cursor:pointer}
+  .c-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(280px circle at var(--cx,50%) var(--cy,50%),rgba(184,147,90,.07),transparent 80%);opacity:0;transition:opacity .4s;pointer-events:none}
+  .c-card:hover::before{opacity:1}
+  .c-card:hover{border-color:rgba(184,147,90,.38);transform:translateY(-5px);box-shadow:0 24px 56px rgba(0,0,0,.45)}
+  .card-topline{position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .35s}
+  .c-card:hover .card-topline{opacity:1}
+  .tl-amber{background:linear-gradient(90deg,var(--amber),transparent)}
+  .tl-slate{background:linear-gradient(90deg,var(--slate),transparent)}
+  .tl-teal{background:linear-gradient(90deg,var(--teal),transparent)}
+  .tl-crimson{background:linear-gradient(90deg,var(--crimson),transparent)}
+
+  .c-badge{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:30px;background:var(--amber);color:#000;font-weight:700}
+  .c-badge.new{background:var(--teal)}
+  .c-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;position:relative;flex-shrink:0}
+  .c-icon::after{content:'';position:absolute;inset:0;border-radius:12px;border:1px solid currentColor;opacity:.25}
+  .ic-red{background:var(--crimson-dim);color:#c85050}
+  .ic-amber{background:var(--amber-dim);color:var(--amber)}
+  .ic-slate{background:var(--slate-dim);color:var(--slate-lt)}
+  .ic-teal{background:var(--teal-dim);color:var(--teal)}
+  .c-tag{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--text-faint);text-transform:uppercase;margin-bottom:9px}
+  .c-title{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.25;color:var(--text);margin-bottom:11px}
+  .c-desc{font-family:var(--sans);font-size:13.5px;line-height:1.75;color:var(--text-dim);margin-bottom:20px;flex:1}
+  .c-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+  .pill{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--text-dim);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:4px 10px;border-radius:20px}
+  .c-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+  .c-meta{display:flex;gap:14px;flex-wrap:wrap}
+  .c-meta span{font-family:var(--mono);font-size:10.5px;color:var(--text-faint);display:flex;align-items:center;gap:5px}
+  .c-meta strong{color:var(--text-dim);font-weight:500}
+  .c-arrow{width:32px;height:32px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:13px;flex-shrink:0;transition:background .25s,border-color .25s,color .25s,transform .25s}
+  .c-card:hover .c-arrow{background:var(--amber);border-color:var(--amber);color:#000;transform:rotate(45deg)}
+  .custom-card{border-style:dashed;border-color:rgba(184,147,90,.2);align-items:center;justify-content:center;text-align:center;min-height:300px;background:transparent;cursor:default}
+  .custom-card:hover{border-color:rgba(184,147,90,.42);transform:translateY(-4px)}
+  .custom-plus{font-size:34px;color:var(--amber);opacity:.45;margin-bottom:14px;line-height:1}
+
+  /* TECH STRIP */
+  .tech-strip{padding:50px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
+  .tech-row{display:flex;gap:50px;white-space:nowrap;animation:techScroll 28s linear infinite}
+  .tech-item{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:1.5px;color:var(--text-faint)}
+  .t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  @keyframes techScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ABOUT */
+  #about{padding:120px 0 130px;position:relative;overflow:hidden}
+  .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  @media(max-width:900px){.about-layout{grid-template-columns:1fr;gap:52px}}
+  .about-visual{position:relative;height:500px}
+  @media(max-width:900px){.about-visual{height:340px}}
+  .about-main{position:absolute;inset:0;background:var(--panel2);border:1px solid var(--border2);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:40px}
+  .about-main::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 75% 15%,rgba(184,147,90,.1),transparent 55%),radial-gradient(circle at 20% 85%,rgba(74,127,165,.07),transparent 55%)}
+  .about-ghost{position:absolute;top:20px;right:32px;font-family:var(--serif);font-size:120px;font-weight:700;color:rgba(184,147,90,.05);line-height:1;pointer-events:none;user-select:none}
+  .about-q{position:relative;z-index:1}
+  .about-q h3{font-family:var(--serif);font-style:italic;font-size:24px;font-weight:400;color:var(--amber);line-height:1.35;margin-bottom:10px}
+  .about-q p{font-size:13.5px;color:var(--text-dim);line-height:1.7;max-width:300px}
+  .about-chip{position:absolute;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .chip1{top:-20px;right:-20px}.chip2{bottom:56px;left:-20px}
+  @media(max-width:600px){.about-chip{display:none}}
+  .chip-ico{width:40px;height:40px;border-radius:10px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .chip-info strong{font-family:var(--sans);font-weight:700;font-size:17px;color:var(--amber);display:block}
+  .chip-info small{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:1px}
+  .about-list{list-style:none;display:flex;flex-direction:column;gap:15px;margin:30px 0 38px}
+  .about-list li{display:flex;gap:14px;align-items:flex-start;font-size:14px;color:var(--text-dim);line-height:1.65}
+  .chk{width:20px;height:20px;border-radius:6px;background:var(--teal-dim);border:1px solid rgba(46,158,138,.3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--teal);flex-shrink:0;margin-top:2px}
+
+  /* CONTACT */
+  #contact{padding:120px 0 130px;background:var(--bg2);position:relative;overflow:hidden}
+  .contact-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:72px;align-items:start}
+  @media(max-width:860px){.contact-layout{grid-template-columns:1fr}}
+  .cd-list{list-style:none;display:flex;flex-direction:column;gap:22px;margin-top:38px}
+  .cd-list li{display:flex;gap:18px;align-items:flex-start}
+  .cd-icon{width:46px;height:46px;border-radius:10px;background:var(--panel2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .cd-txt strong{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:4px}
+  .cd-txt span{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+  .cf{background:var(--panel);border:1px solid var(--border2);border-radius:18px;padding:44px 40px;position:relative;overflow:hidden}
+  @media(max-width:540px){.cf{padding:28px 18px}}
+  .cf::before{content:'';position:absolute;top:-1px;left:40px;right:40px;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:480px){.form-row{grid-template-columns:1fr}}
+  .fg{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+  .fg label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--text-faint);text-transform:uppercase}
+  .fg input,.fg select,.fg textarea{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px 15px;color:var(--text);font-family:var(--sans);font-size:14px;width:100%;outline:none;resize:none;appearance:none;transition:border-color .25s,box-shadow .25s}
+  .fg input::placeholder,.fg textarea::placeholder{color:var(--text-faint)}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(184,147,90,.1)}
+  .fg textarea{height:110px}
+  .fg select{cursor:pointer;color:var(--text)}
+  .fg select option{background:var(--surface)}
+  .form-btn{width:100%;background:var(--amber);color:#000;border:none;border-radius:8px;padding:15px;font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:background .25s,box-shadow .3s,transform .2s}
+  .form-btn:hover{background:var(--amber-lt);box-shadow:var(--glow-amber);transform:translateY(-2px)}
+  .form-success{display:none;text-align:center;padding:48px 20px}
+  .sring{width:64px;height:64px;border-radius:50%;background:var(--teal-dim);border:1px solid rgba(46,158,138,.35);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--teal);margin:0 auto 20px}
+  .form-success h3{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--teal);margin-bottom:8px}
+  .form-success p{font-size:14px;color:var(--text-dim)}
+
+  /* FOOTER */
+  footer{padding:56px 0 36px;border-top:1px solid var(--border);position:relative;z-index:2}
+  .ft{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:36px}
+  .fl .fname{font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:3px;color:var(--amber);text-transform:uppercase}
+  .fl .ftag{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--text-dim);margin-top:4px}
+  .fn{display:flex;gap:4px;list-style:none;flex-wrap:wrap}
+  .fn a{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--text-faint);text-transform:uppercase;padding:6px 12px;border-radius:5px;transition:color .2s,background .2s}
+  .fn a:hover{color:var(--amber);background:var(--amber-dim)}
+  .fb{padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .fb p{font-family:var(--mono);font-size:11px;color:var(--text-faint)}
+  </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
 
-<nav id="navbar">
-  <div class="nav-logo">ITE <span>Infortech</span></div>
+<!-- NAV -->
+<header id="navbar">
+  <a href="#home" class="nav-logo">
+    <div class="logo-mark">ITE</div>
+    <div class="logo-text">
+      <span class="lname">Infotech Institute</span>
+      <span class="lsub">Master the Future of Tech</span>
+    </div>
+  </a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
+    <li><a href="#home">Home</a></li>
     <li><a href="#courses">Courses</a></li>
-    <li><a href="#paths">Paths</a></li>
-    <li><a href="#tools">Tools</a></li>
-    <li><a href="#testimonials">Alumni</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Enroll Now</a></li>
   </ul>
-  <button class="nav-cta">Enroll Now</button>
-</nav>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
 
-<section class="hero" id="home">
-  <div class="hero-bg-pattern"></div>
-  <div class="hero-orb orb1"></div>
-  <div class="hero-orb orb2"></div>
-
-  <p class="hero-tag" id="heroTag">✦ Where Expertise Meets Excellence ✦</p>
-  <h1 id="heroTitle">Master the<br><em>Digital Future</em></h1>
-  <p class="hero-sub" id="heroSub">ITE Infortech Institute — a premier centre of excellence for Red Hat Linux, AWS, Kubernetes, Cybersecurity, and the full spectrum of DevOps mastery.</p>
-  <div class="hero-actions" id="heroActions">
-    <button class="btn-primary">Explore Courses</button>
-    <button class="btn-outline">Download Brochure</button>
-  </div>
-
-  <div class="hero-scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<div class="marquee-wrap" aria-hidden="true">
-  <div class="marquee-track" id="marqueeTrack"></div>
+<div class="mob-drawer" id="mobDrawer">
+  <nav class="mob-nav">
+    <a href="#home"    class="mlink">Home</a>
+    <a href="#courses" class="mlink">Courses</a>
+    <a href="#about"   class="mlink">About</a>
+    <a href="#contact" class="mlink">Contact</a>
+  </nav>
+  <a href="#contact" class="mob-cta-btn mlink">Enroll Now &#8594;</a>
 </div>
 
-<div class="stats-band">
-  <div class="stat-item">
-    <div class="stat-number"><span class="count" data-target="4200">0</span>+</div>
-    <div class="stat-label">Students Trained</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number"><span class="count" data-target="18">0</span>+</div>
-    <div class="stat-label">Expert Instructors</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number"><span class="count" data-target="32">0</span>+</div>
-    <div class="stat-label">Industry Courses</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number"><span class="count" data-target="96">0</span>%</div>
-    <div class="stat-label">Placement Rate</div>
-  </div>
-</div>
-
-<section class="about" id="about">
-  <div class="about-inner">
-    <div>
-      <span class="section-tag reveal">Our Story</span>
-      <h2 class="section-title reveal">Forged in <em>passion</em>,<br>built for industry</h2>
-      <div class="section-line reveal"></div>
-      <p class="section-desc reveal">ITE Infortech Institute was founded with a singular vision — to bridge the gap between academic learning and real-world technology demands. Our instructors are industry veterans who live and breathe the technologies they teach.</p>
-      <blockquote class="about-quote reveal">"We do not simply train professionals. We cultivate engineers who think, solve, and lead."</blockquote>
+<!-- HERO -->
+<section id="home">
+  <div id="particles-js"></div>
+  <div class="hero-grid"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(184,147,90,.1);top:-80px;left:-140px;filter:blur(110px);"></div>
+  <div class="orb" style="width:360px;height:360px;background:rgba(74,127,165,.08);bottom:-40px;right:-100px;filter:blur(100px);"></div>
+  <div class="hero-inner">
+    <div class="hero-badge" id="heroBadge">India's Premier Technology Training Institute</div>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="italic-line">Master the Art of</span>
+      <span class="bold-line">Modern Technology</span>
+    </h1>
+    <p class="hero-sub" id="heroSub">From Red Hat Linux to Kubernetes &amp; beyond &#8212; hands-on programs crafted for engineers who build the future.</p>
+    <div class="hero-actions" id="heroActions">
+      <a href="#courses" class="btn-primary">Explore Courses</a>
+      <a href="#about"   class="btn-ghost">Learn About Us</a>
     </div>
-    <div class="about-img-wrap reveal">
-      <div class="about-img-box">
-        <div class="about-img-text">ITE</div>
-        <div class="about-img-accent"></div>
+    <div class="hero-stats" id="heroStats">
+      <div class="stat-item"><span class="stat-num" data-target="2500" data-suffix="+">0</span><span class="stat-lbl">Students Trained</span></div>
+      <div class="stat-item"><span class="stat-num" data-target="12"   data-suffix="">0</span><span class="stat-lbl">Expert Instructors</span></div>
+      <div class="stat-item"><span class="stat-num" data-target="95"   data-suffix="%">0</span><span class="stat-lbl">Placement Rate</span></div>
+      <div class="stat-item"><span class="stat-num" data-target="8"    data-suffix="">0</span><span class="stat-lbl">Years of Excellence</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><div class="scroll-bar"></div></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<!-- COURSES -->
+<section id="courses">
+  <div class="orb" style="width:380px;height:380px;background:rgba(184,147,90,.07);top:10%;right:-120px;filter:blur(90px);"></div>
+  <div class="container">
+    <div class="courses-hd">
+      <div>
+        <p class="section-tag reveal">Our Programs</p>
+        <h2 class="section-title reveal">Courses that<br><em>transform careers</em></h2>
+      </div>
+      <p class="note reveal">Industry-aligned curricula taught by certified professionals with real-world enterprise experience.</p>
+    </div>
+    <div class="courses-grid" id="coursesGrid"></div>
+  </div>
+</section>
+
+<!-- TECH STRIP -->
+<div class="tech-strip" aria-hidden="true"><div class="tech-row" id="techRow"></div></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="orb" style="width:460px;height:460px;background:rgba(74,127,165,.08);right:-130px;top:20%;filter:blur(100px);"></div>
+  <div class="container">
+    <div class="about-layout">
+      <div class="about-visual reveal">
+        <div class="about-main">
+          <div class="about-ghost">ITE</div>
+          <div class="about-q">
+            <h3>&#8220;Where Engineers<br>Find Their Edge&#8221;</h3>
+            <p>Curiosity meets rigour. Our students graduate as practitioners &#8212; not just passers of exams.</p>
+          </div>
+        </div>
+        <div class="about-chip chip1">
+          <div class="chip-ico">&#127942;</div>
+          <div class="chip-info"><strong>Top Rated</strong><small>4.9 / 5.0 Stars</small></div>
+        </div>
+        <div class="about-chip chip2">
+          <div class="chip-ico">&#127891;</div>
+          <div class="chip-info"><strong>2,500+</strong><small>Alumni Network</small></div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <p class="section-tag">Our Story</p>
+        <h2 class="section-title">Built for the<br><em>next generation</em><br>of tech leaders</h2>
+        <p class="section-sub">Founded in Bhopal, ITE Infotech Institute has shaped careers since 2016 with a singular mission: deliver world-class technical education at every level.</p>
+        <ul class="about-list">
+          <li><div class="chk">&#10003;</div><span>Certified Red Hat, AWS, and CompTIA authorised training programs.</span></li>
+          <li><div class="chk">&#10003;</div><span>100% practical, lab-based learning with real enterprise infrastructure.</span></li>
+          <li><div class="chk">&#10003;</div><span>Industry mentors with 10+ years of hands-on DevOps and Cloud experience.</span></li>
+          <li><div class="chk">&#10003;</div><span>Dedicated placement cell with 95%+ placement assistance record.</span></li>
+          <li><div class="chk">&#10003;</div><span>Small batch sizes ensuring personalised attention and guidance.</span></li>
+        </ul>
+        <a href="#contact" class="btn-primary">Start Your Journey</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="courses" id="courses">
-  <div class="courses-inner">
-    <span class="section-tag reveal">What We Teach</span>
-    <h2 class="section-title reveal">Our <em>Signature</em> Programmes</h2>
-    <div class="section-line reveal"></div>
-    <p class="section-desc reveal">Each course is meticulously crafted by certified experts, aligned with the latest industry certifications and real-world deployment scenarios.</p>
-
-    <div class="courses-grid">
-      <div class="course-card reveal">
-        <div class="course-icon">🐧</div>
-        <div class="course-title">Red Hat Linux</div>
-        <p class="course-desc">RHCSA & RHCE certification prep. System administration, shell scripting, SELinux, and enterprise Linux management.</p>
-        <div class="course-meta">
-          <span class="badge featured">RHCSA/RHCE</span>
-          <span class="badge">60 Hours</span>
-          <span class="badge">Hands-on Labs</span>
-        </div>
+<!-- CONTACT -->
+<section id="contact">
+  <div class="orb" style="width:420px;height:420px;background:rgba(184,147,90,.07);left:-120px;bottom:5%;filter:blur(100px);"></div>
+  <div class="container">
+    <div class="contact-layout">
+      <div>
+        <p class="section-tag reveal">Get in Touch</p>
+        <h2 class="section-title reveal">Ready to<br><em>begin your<br>journey?</em></h2>
+        <ul class="cd-list reveal">
+          <li><div class="cd-icon">&#128205;</div><div class="cd-txt"><strong>Address</strong><span>ITE Infotech Institute, Bhopal, Madhya Pradesh, India</span></div></li>
+          <li><div class="cd-icon">&#128222;</div><div class="cd-txt"><strong>Phone</strong><span>+91 98765 43210</span></div></li>
+          <li><div class="cd-icon">&#9993;&#65039;</div><div class="cd-txt"><strong>Email</strong><span>admissions@iteinfotech.in</span></div></li>
+          <li><div class="cd-icon">&#128336;</div><div class="cd-txt"><strong>Hours</strong><span>Monday &#8211; Saturday, 9:00 AM &#8211; 7:00 PM</span></div></li>
+        </ul>
       </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">☁️</div>
-        <div class="course-title">Amazon Web Services</div>
-        <p class="course-desc">AWS Solutions Architect, DevOps, and SysOps tracks. EC2, S3, VPC, Lambda, IAM, CloudFormation and beyond.</p>
-        <div class="course-meta">
-          <span class="badge featured">AWS Certified</span>
-          <span class="badge">80 Hours</span>
-          <span class="badge">Cloud Labs</span>
+      <div class="cf reveal">
+        <div id="formBody">
+          <div class="form-row">
+            <div class="fg"><label for="fFirst">First Name</label><input type="text" id="fFirst" placeholder="Aryan" autocomplete="given-name"/></div>
+            <div class="fg"><label for="fLast">Last Name</label><input type="text" id="fLast" placeholder="Sharma" autocomplete="family-name"/></div>
+          </div>
+          <div class="fg"><label for="fEmail">Email Address</label><input type="email" id="fEmail" placeholder="aryan@example.com" autocomplete="email"/></div>
+          <div class="fg"><label for="fPhone">Phone Number</label><input type="tel" id="fPhone" placeholder="+91 98765 43210" autocomplete="tel"/></div>
+          <div class="fg">
+            <label for="fCourse">Course of Interest</label>
+            <select id="fCourse">
+              <option value="" disabled selected>Select a program&#8230;</option>
+              <option value="Red Hat Linux Administration">Red Hat Linux Administration</option>
+              <option value="Amazon Web Services (AWS)">Amazon Web Services (AWS)</option>
+              <option value="Kubernetes and Docker Mastery">Kubernetes &amp; Docker Mastery</option>
+              <option value="Cybersecurity Professional">Cybersecurity Professional</option>
+              <option value="DevOps and CI/CD Pipeline">DevOps &amp; CI/CD Pipeline</option>
+              <option value="Corporate Training">Corporate Training</option>
+            </select>
+          </div>
+          <div class="fg"><label for="fMsg">Message (Optional)</label><textarea id="fMsg" placeholder="Tell us about your background and goals&#8230;"></textarea></div>
+          <button class="form-btn" id="formBtn">Send Enquiry &#8594;</button>
         </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">⚓</div>
-        <div class="course-title">Kubernetes & Docker</div>
-        <p class="course-desc">Container orchestration from fundamentals to production. Helm, service mesh, RBAC, persistent volumes and cluster security.</p>
-        <div class="course-meta">
-          <span class="badge featured">CKA / CKAD</span>
-          <span class="badge">70 Hours</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">🔐</div>
-        <div class="course-title">Cybersecurity</div>
-        <p class="course-desc">Ethical hacking, penetration testing, network forensics, threat modelling and SOC operations. CEH & CompTIA aligned.</p>
-        <div class="course-meta">
-          <span class="badge featured">CEH / CompTIA</span>
-          <span class="badge">90 Hours</span>
-          <span class="badge">Red Team Labs</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">🔁</div>
-        <div class="course-title">DevOps Engineering</div>
-        <p class="course-desc">CI/CD pipelines with Jenkins, GitHub Actions & ArgoCD. Infrastructure as Code with Terraform and Ansible at scale.</p>
-        <div class="course-meta">
-          <span class="badge featured">DevOps Pro</span>
-          <span class="badge">75 Hours</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">📊</div>
-        <div class="course-title">Monitoring & Observability</div>
-        <p class="course-desc">Prometheus, Grafana, ELK Stack and OpenTelemetry. Build production-grade observability platforms from the ground up.</p>
-        <div class="course-meta">
-          <span class="badge">Prometheus</span>
-          <span class="badge">Grafana</span>
-          <span class="badge">ELK</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">🏗️</div>
-        <div class="course-title">Terraform & Ansible</div>
-        <p class="course-desc">Infrastructure as Code mastery. Provision, configure and manage multi-cloud environments with precision and elegance.</p>
-        <div class="course-meta">
-          <span class="badge">IaC</span>
-          <span class="badge">Multi-cloud</span>
-          <span class="badge">40 Hours</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">🌐</div>
-        <div class="course-title">Networking & Linux+</div>
-        <p class="course-desc">TCP/IP, DNS, firewalls, VPNs and advanced networking. CompTIA Network+ and Linux+ certification tracks.</p>
-        <div class="course-meta">
-          <span class="badge">Network+</span>
-          <span class="badge">Linux+</span>
-          <span class="badge">50 Hours</span>
-        </div>
-      </div>
-
-      <div class="course-card reveal">
-        <div class="course-icon">⚡</div>
-        <div class="course-title">Site Reliability Engineering</div>
-        <p class="course-desc">SLOs, error budgets, toil reduction and incident management. Build reliable, scalable systems the SRE way.</p>
-        <div class="course-meta">
-          <span class="badge featured">SRE Track</span>
-          <span class="badge">Advanced</span>
+        <div class="form-success" id="formSuccess">
+          <div class="sring">&#10003;</div>
+          <h3>Enquiry Received!</h3>
+          <p>Thank you for reaching out. Our admissions team will contact you within 24 hours.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="paths" id="paths">
-  <div class="paths-inner">
-    <span class="section-tag reveal">Your Journey</span>
-    <h2 class="section-title reveal">Choose your <em style="color:var(--gold)">Learning Path</em></h2>
-    <div class="section-line reveal"></div>
-    <p class="section-desc reveal">Structured progression tracks designed to take you from fundamentals to industry-ready expertise in each discipline.</p>
-
-    <div class="path-list">
-      <div class="path-item reveal">
-        <div class="path-num">01</div>
-        <div class="path-body">
-          <div class="path-title">Linux Systems Administrator</div>
-          <p class="path-desc">Begin with Linux fundamentals, advance to Red Hat enterprise administration, shell scripting, and system hardening. Exit as an RHCSA/RHCE certified professional.</p>
-          <div class="path-tags">
-            <span class="path-tag">Linux Basics</span>
-            <span class="path-tag">RHCSA</span>
-            <span class="path-tag">RHCE</span>
-            <span class="path-tag">Shell Scripting</span>
-          </div>
-        </div>
-      </div>
-      <div class="path-item reveal">
-        <div class="path-num">02</div>
-        <div class="path-body">
-          <div class="path-title">Cloud Architect on AWS</div>
-          <p class="path-desc">From cloud fundamentals to architecting highly available, fault-tolerant AWS solutions. Covers all AWS Associate and Professional certification domains.</p>
-          <div class="path-tags">
-            <span class="path-tag">AWS CLF</span>
-            <span class="path-tag">SAA-C03</span>
-            <span class="path-tag">SysOps</span>
-            <span class="path-tag">DevOps Pro</span>
-          </div>
-        </div>
-      </div>
-      <div class="path-item reveal">
-        <div class="path-num">03</div>
-        <div class="path-body">
-          <div class="path-title">DevOps & Platform Engineer</div>
-          <p class="path-desc">Master the full DevOps toolchain — from version control and CI/CD to containers, Kubernetes, IaC and observability. The definitive path for platform engineers.</p>
-          <div class="path-tags">
-            <span class="path-tag">Git & CI/CD</span>
-            <span class="path-tag">Docker</span>
-            <span class="path-tag">Kubernetes</span>
-            <span class="path-tag">Terraform</span>
-            <span class="path-tag">Monitoring</span>
-          </div>
-        </div>
-      </div>
-      <div class="path-item reveal">
-        <div class="path-num">04</div>
-        <div class="path-body">
-          <div class="path-title">Cybersecurity Specialist</div>
-          <p class="path-desc">Ethical hacking, defensive security, and SOC operations. Prepares you for CEH, CompTIA Security+, and real-world blue/red team engagements.</p>
-          <div class="path-tags">
-            <span class="path-tag">Security+</span>
-            <span class="path-tag">CEH</span>
-            <span class="path-tag">Pen Testing</span>
-            <span class="path-tag">SOC Ops</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="tools" id="tools">
-  <div class="tools-inner">
-    <span class="section-tag reveal">Technologies</span>
-    <h2 class="section-title reveal">The <em>Tools</em> of the Trade</h2>
-    <div class="section-line reveal"></div>
-    <p class="section-desc reveal">You will gain hands-on experience with the exact technologies that power modern enterprise infrastructure worldwide.</p>
-    <div class="tools-grid" id="toolsGrid"></div>
-  </div>
-</section>
-
-<section class="testimonials" id="testimonials">
-  <div class="testimonials-inner">
-    <span class="section-tag reveal">Alumni Voices</span>
-    <h2 class="section-title reveal">Stories of <em>Transformation</em></h2>
-    <div class="section-line reveal"></div>
-
-    <div class="testimonials-grid">
-      <div class="testi-card reveal">
-        <span class="testi-quote-mark">"</span>
-        <p class="testi-text">ITE Infortech transformed my career completely. The Kubernetes and AWS tracks were incredibly rigorous — exactly what industry demands.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">AR</div>
-          <div>
-            <div class="testi-name">Arjun Rathore</div>
-            <div class="testi-role">DevOps Engineer, Infosys</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal">
-        <span class="testi-quote-mark">"</span>
-        <p class="testi-text">The cybersecurity programme gave me the confidence to ace my CEH. The red team labs were unlike anything I had experienced before.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">PS</div>
-          <div>
-            <div class="testi-name">Priya Sharma</div>
-            <div class="testi-role">Security Analyst, TCS</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal">
-        <span class="testi-quote-mark">"</span>
-        <p class="testi-text">From a fresher to a cloud architect in under a year. The AWS path at ITE is thorough, practical, and brilliantly structured.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">MK</div>
-          <div>
-            <div class="testi-name">Mohit Kulkarni</div>
-            <div class="testi-role">Cloud Architect, Wipro</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-section">
-  <h2 class="cta-title">Begin your transformation today</h2>
-  <p class="cta-sub">Join thousands of engineers who chose ITE Infortech to build careers that endure. The next cohort begins soon.</p>
-  <div class="cta-form">
-    <input class="cta-input" type="email" placeholder="Your email address…">
-    <button class="cta-btn">Apply →</button>
-  </div>
-</section>
-
+<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">ITE Infortech</div>
-      <p class="footer-about">A premier technology institute dedicated to producing world-class Linux, Cloud, DevOps, and Cybersecurity professionals. Excellence in every session.</p>
-    </div>
-    <div>
-      <div class="footer-heading">Courses</div>
-      <ul class="footer-links">
-        <li><a href="#">Red Hat Linux</a></li>
-        <li><a href="#">Amazon AWS</a></li>
-        <li><a href="#">Kubernetes</a></li>
-        <li><a href="#">Cybersecurity</a></li>
-        <li><a href="#">DevOps</a></li>
+  <div class="container">
+    <div class="ft">
+      <div class="fl">
+        <div class="fname">ITE &#183; Infotech Institute</div>
+        <div class="ftag">Master the Future of Technology</div>
+      </div>
+      <ul class="fn">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
-    <div>
-      <div class="footer-heading">Institute</div>
-      <ul class="footer-links">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Instructors</a></li>
-        <li><a href="#">Placement Cell</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+    <div class="fb">
+      <p>&#169; 2024 ITE Infotech Institute &#8212; Bhopal, Madhya Pradesh</p>
+      <p>Empowering Engineers Across India</p>
     </div>
-    <div>
-      <div class="footer-heading">Contact</div>
-      <ul class="footer-links">
-        <li><a href="#">Bhopal, MP, India</a></li>
-        <li><a href="#">info@iteinfortech.in</a></li>
-        <li><a href="#">+91 98765 43210</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2025 ITE Infortech Institute. All rights reserved.</span>
-    <span style="font-family:'Dancing Script',cursive;font-size:1.1rem;color:rgba(184,134,11,0.6);">Where Expertise Meets Excellence</span>
   </div>
 </footer>
 
 <script>
-// ── Cursor ──
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
-(function animRing(){
-  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  requestAnimationFrame(animRing);
-})();
-document.querySelectorAll('button,a,.course-card,.testi-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cursor.style.width='18px';cursor.style.height='18px';ring.style.width='52px';ring.style.height='52px';ring.style.opacity='0.3';});
-  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='0.6';});
-});
+(function(){
+'use strict';
 
-// ── Hero entrance ──
-window.addEventListener('load', () => {
-  const tl = [
-    ['#heroTag', 0.2],
-    ['#heroTitle', 0.5],
-    ['#heroSub', 0.85],
-    ['#heroActions', 1.1]
-  ];
-  tl.forEach(([sel, delay]) => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    setTimeout(() => {
-      el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, delay * 1000);
-    el.style.transform = 'translateY(24px)';
+/* 1. DEVICE CHECK */
+var isPointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+/* 2. CURSOR */
+var dot  = document.getElementById('cur-dot');
+var ring = document.getElementById('cur-ring');
+if (isPointer) {
+  dot.style.display  = 'block';
+  ring.style.display = 'block';
+  var mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+  document.querySelectorAll('a,button,input,select,textarea,label').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ document.body.classList.add('cur-hov'); });
+    el.addEventListener('mouseleave', function(){ document.body.classList.remove('cur-hov'); });
+  });
+  (function animRing(){
+    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animRing);
+  })();
+}
+
+/* 3. NAV SCROLL */
+var navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function(){ navbar.classList.toggle('scrolled', window.scrollY > 60); }, {passive:true});
+
+/* 4. ACTIVE LINK */
+var sections = Array.from(document.querySelectorAll('section[id]'));
+var navAs    = Array.from(document.querySelectorAll('.nav-links a:not(.nav-cta)'));
+function setActive(){
+  var cur='';
+  sections.forEach(function(s){ if(window.scrollY >= s.offsetTop - 130) cur=s.id; });
+  navAs.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href')==='#'+cur); });
+}
+window.addEventListener('scroll', setActive, {passive:true});
+setActive();
+
+/* 5. HAMBURGER */
+var ham    = document.getElementById('hamburger');
+var drawer = document.getElementById('mobDrawer');
+var open   = false;
+function openD(){ open=true;  drawer.classList.add('open');    ham.classList.add('open');    ham.setAttribute('aria-expanded','true');  document.body.style.overflow='hidden'; }
+function closeD(){ open=false; drawer.classList.remove('open'); ham.classList.remove('open'); ham.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+ham.addEventListener('click', function(){ open ? closeD() : openD(); });
+document.querySelectorAll('.mlink').forEach(function(a){ a.addEventListener('click', closeD); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape' && open) closeD(); });
+
+/* 6. SMOOTH SCROLL */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 76, behavior:'smooth'}); }
   });
 });
 
-// ── Marquee ──
-const items = ['Red Hat Linux','AWS','Kubernetes','Docker','Cybersecurity','DevOps','Terraform','Ansible','Jenkins','Prometheus','Grafana','Helm','ArgoCD','GitOps','SRE','ELK Stack'];
-const track = document.getElementById('marqueeTrack');
-let html = '';
-for (let i=0; i<4; i++) items.forEach(t => { html += `<span class="marquee-item">${t}<span class="marquee-dot">◆</span></span>`; });
-track.innerHTML = html;
-
-// ── Tools grid ──
-const tools = ['Red Hat Enterprise Linux','RHCSA / RHCE','Amazon Web Services','EC2 & S3 & VPC','Lambda & IAM','Kubernetes','Docker & Podman','Helm Charts','ArgoCD','Jenkins','GitHub Actions','GitLab CI','Terraform','Ansible','Prometheus','Grafana','ELK Stack','OpenTelemetry','Kali Linux','Metasploit','Wireshark','Nmap','Vault by HashiCorp','Linux Networking','Bash Scripting','Python for DevOps','Git & GitOps','Azure Fundamentals'];
-const tg = document.getElementById('toolsGrid');
-tools.forEach((t,i) => {
-  const chip = document.createElement('div');
-  chip.className = 'tool-chip reveal';
-  chip.textContent = t;
-  chip.style.animationDelay = (i * 0.04) + 's';
-  tg.appendChild(chip);
+/* 7. PARTICLES */
+particlesJS('particles-js',{
+  particles:{
+    number:{value: isPointer?50:24, density:{enable:true,value_area:900}},
+    color:{value:'#b8935a'}, shape:{type:'circle'},
+    opacity:{value:0.2,random:true}, size:{value:1.8,random:true},
+    line_linked:{enable:true,distance:120,color:'#b8935a',opacity:0.07,width:1},
+    move:{enable:true,speed:0.7,random:true,out_mode:'out'}
+  },
+  interactivity:{
+    detect_on:'canvas',
+    events:{onhover:{enable:isPointer,mode:'grab'},onclick:{enable:false}},
+    modes:{grab:{distance:160,line_linked:{opacity:0.2}}}
+  },
+  retina_detect:true
 });
 
-// ── Scroll reveal ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-  });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+/* 8. TICKER */
+var tickItems = ['Red Hat Linux','AWS','Kubernetes','Cybersecurity','DevOps','Docker','Terraform','Ansible','CI/CD','Security+','RHCSA','Jenkins'];
+var tickEl    = document.getElementById('tickerTrack');
+tickEl.innerHTML = (tickItems.map(function(t){ return '<span>'+t+'</span><span class="dsep"> &middot; </span>'; }).join('')).repeat(4);
 
-// ── Counter animation ──
-function animateCount(el, target, duration=1800) {
-  let start = null;
-  const step = (ts) => {
-    if (!start) start = ts;
-    const p = Math.min((ts-start)/duration, 1);
-    el.textContent = Math.floor(p * target);
-    if (p < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  };
+/* 9. COURSES */
+var courses = [
+  {icon:'&#128039;',ic:'ic-red',tl:'tl-crimson',tag:'Certification Track',title:'Red Hat Linux Administration',desc:'Deep-dive into RHEL system administration, shell scripting, performance tuning, and hands-on preparation for RHCSA &amp; RHCE certifications.',skills:['RHEL 9','Bash','SELinux','Systemd','LVM'],dur:'3 Months',cert:'RHCSA / RHCE',badge:{txt:'Most Popular',cls:''}},
+  {icon:'&#9729;&#65039;',ic:'ic-amber',tl:'tl-amber',tag:'Cloud Computing',title:'Amazon Web Services (AWS)',desc:'Comprehensive AWS training covering EC2, S3, RDS, Lambda, VPC, and IAM &#8212; from Cloud Practitioner through to Solutions Architect level.',skills:['EC2','S3','Lambda','VPC','IAM','RDS'],dur:'4 Months',cert:'AWS Certified',badge:null},
+  {icon:'&#9881;&#65039;',ic:'ic-slate',tl:'tl-slate',tag:'Container Orchestration',title:'Kubernetes &amp; Docker Mastery',desc:'Container fundamentals, Kubernetes architecture, Helm charts, service meshes, and full CKA / CKAD exam preparation with live labs.',skills:['Docker','Kubernetes','Helm','Istio','kubectl'],dur:'2 Months',cert:'CKA / CKAD',badge:{txt:'New Batch',cls:'new'}},
+  {icon:'&#128272;',ic:'ic-red',tl:'tl-crimson',tag:'Information Security',title:'Cybersecurity Professional',desc:'Ethical hacking, penetration testing, network security, SIEM tools, SOC operations, and CompTIA Security+ / CEH exam preparation.',skills:['Kali Linux','Nmap','Metasploit','Wireshark','SIEM'],dur:'5 Months',cert:'CEH / Security+',badge:null},
+  {icon:'&#128260;',ic:'ic-teal',tl:'tl-teal',tag:'Engineering Culture',title:'DevOps &amp; CI/CD Pipeline',desc:'Jenkins, GitLab CI, Terraform, Ansible, Prometheus &amp; Grafana monitoring &#8212; the complete DevOps lifecycle from code commit to production deploy.',skills:['Jenkins','Terraform','Ansible','GitLab','Grafana'],dur:'4 Months',cert:'DevOps Pro',badge:null}
+];
+
+var grid = document.getElementById('coursesGrid');
+courses.forEach(function(c){
+  var el = document.createElement('div');
+  el.className = 'c-card reveal';
+  var badgeHTML = c.badge ? '<span class="c-badge '+c.badge.cls+'">'+c.badge.txt+'</span>' : '';
+  var pillsHTML = c.skills.map(function(s){ return '<span class="pill">'+s+'</span>'; }).join('');
+  el.innerHTML =
+    '<div class="card-topline '+c.tl+'"></div>'+
+    badgeHTML+
+    '<div class="c-icon '+c.ic+'">'+c.icon+'</div>'+
+    '<p class="c-tag">'+c.tag+'</p>'+
+    '<h3 class="c-title">'+c.title+'</h3>'+
+    '<p class="c-desc">'+c.desc+'</p>'+
+    '<div class="c-pills">'+pillsHTML+'</div>'+
+    '<div class="c-foot">'+
+      '<div class="c-meta">'+
+        '<span>&#9201; <strong>'+c.dur+'</strong></span>'+
+        '<span>&#128203; <strong>'+c.cert+'</strong></span>'+
+      '</div>'+
+      '<div class="c-arrow">&#8599;</div>'+
+    '</div>';
+  el.addEventListener('mousemove', function(e){
+    var r=el.getBoundingClientRect();
+    el.style.setProperty('--cx',((e.clientX-r.left)/r.width*100)+'%');
+    el.style.setProperty('--cy',((e.clientY-r.top)/r.height*100)+'%');
+  });
+  el.addEventListener('click', function(){
+    document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+  });
+  grid.appendChild(el);
+});
+
+var cc = document.createElement('div');
+cc.className = 'c-card custom-card reveal';
+cc.innerHTML =
+  '<div class="custom-plus">+</div>'+
+  '<h3 class="c-title" style="font-size:20px;margin-bottom:10px;">Corporate Training</h3>'+
+  '<p class="c-desc" style="font-size:13px;max-width:240px;">Bespoke programs tailored to your organisation\'s technology stack and team objectives.</p>'+
+  '<a href="#contact" class="btn-ghost" style="font-size:12px;padding:10px 26px;margin-top:8px;">Get in Touch</a>';
+grid.appendChild(cc);
+
+/* 10. TECH STRIP */
+var techs = [
+  {n:'Red Hat Enterprise Linux',c:'#b03030'},{n:'Amazon Web Services',c:'#b8935a'},
+  {n:'Kubernetes',c:'#4a7fa5'},{n:'Docker',c:'#4a7fa5'},{n:'Terraform',c:'#7c6fd4'},
+  {n:'Ansible',c:'#b03030'},{n:'Jenkins',c:'#b8935a'},{n:'Prometheus',c:'#b87a3a'},
+  {n:'Grafana',c:'#b87a3a'},{n:'GitLab CI',c:'#b8935a'},{n:'CompTIA Security+',c:'#b03030'},
+  {n:'Helm',c:'#4a7fa5'},{n:'Istio',c:'#2e9e8a'},{n:'OpenShift',c:'#b03030'}
+];
+var row = document.getElementById('techRow');
+row.innerHTML = (techs.map(function(t){
+  return '<div class="tech-item"><div class="t-dot" style="background:'+t.c+'"></div>'+t.n+'</div>';
+}).join('')).repeat(4);
+
+/* 11. SCROLL REVEAL — observe after JS-rendered cards exist */
+var revObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){ entry.target.classList.add('in'); revObs.unobserve(entry.target); }
+  });
+},{threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+setTimeout(function(){ document.querySelectorAll('.reveal').forEach(function(el){ revObs.observe(el); }); }, 60);
+
+/* 12. COUNTER */
+function runCounter(el, target, suffix){
+  var t0=null, dur=1800;
+  function step(ts){
+    if(!t0) t0=ts;
+    var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(e*target).toLocaleString()+suffix;
+    if(p<1) requestAnimationFrame(step);
+  }
   requestAnimationFrame(step);
 }
-const countObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const target = parseInt(e.target.dataset.target);
-      animateCount(e.target, target);
-      countObserver.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
-document.querySelectorAll('.count').forEach(el => countObserver.observe(el));
-
-// ── Nav responsiveness ──
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  if (window.innerWidth > 768) {
-    nav.style.padding = window.scrollY > 60 ? '0.9rem 4rem' : '1.4rem 4rem';
+var fired=false;
+new IntersectionObserver(function(entries){
+  if(entries[0].isIntersecting && !fired){
+    fired=true;
+    document.querySelectorAll('.stat-num').forEach(function(el){
+      runCounter(el, parseInt(el.dataset.target,10), el.dataset.suffix||'');
+    });
   }
+},{threshold:0.4}).observe(document.getElementById('heroStats'));
+
+/* 13. GSAP HERO */
+gsap.registerPlugin(ScrollTrigger);
+gsap.timeline({delay:0.15})
+  .from('#heroBadge',  {opacity:0,y:26,duration:.6, ease:'power3.out'})
+  .from('#heroTitle',  {opacity:0,y:46,duration:.85,ease:'power3.out'},'-=0.28')
+  .from('#heroSub',    {opacity:0,y:24,duration:.6, ease:'power3.out'},'-=0.44')
+  .from('#heroActions',{opacity:0,y:18,duration:.5, ease:'power3.out'},'-=0.38')
+  .from('#heroStats .stat-item',{opacity:0,y:16,stagger:.1,duration:.5,ease:'power3.out'},'-=0.28');
+
+/* 14. FORM */
+document.getElementById('formBtn').addEventListener('click', function(){
+  var first=document.getElementById('fFirst').value.trim();
+  var last =document.getElementById('fLast').value.trim();
+  var email=document.getElementById('fEmail').value.trim();
+  var inv=[];
+  if(!first) inv.push('fFirst'); if(!last) inv.push('fLast'); if(!email) inv.push('fEmail');
+  if(inv.length){
+    inv.forEach(function(id){
+      var inp=document.getElementById(id);
+      inp.style.borderColor='rgba(176,48,48,.8)'; inp.style.boxShadow='0 0 0 3px rgba(176,48,48,.12)';
+      setTimeout(function(){ inp.style.borderColor=''; inp.style.boxShadow=''; },2200);
+    });
+    return;
+  }
+  document.getElementById('formBody').style.display='none';
+  document.getElementById('formSuccess').style.display='block';
 });
+
+})();
 </script>
 </body>
 </html>
